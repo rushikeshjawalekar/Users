@@ -5,13 +5,14 @@ const Person = require("./modelSchemas/userSchema");
 passport.use(
   new localStrategy(async (username, password, done) => {
     try {
-      console.log("Received credentials :", username, password);
+      // console.log("Received credentials :", username, password);
       const user = await Person.findOne({ username: username });
       if (!user) {
         console.log("User not found");
         return done(null, false, { message: "Incorrect Username" });
       }
-      const isValidPassword = user.password === password ? true : false;
+      // const isValidPassword = user.password === password ? true : false;
+      const isValidPassword = user.comparePassword(password);
       if (isValidPassword) {
         console.log("Password is valid");
         return done(null, user);
